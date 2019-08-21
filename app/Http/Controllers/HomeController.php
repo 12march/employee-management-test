@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Copmpany;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class HomeController extends Controller
 {
@@ -23,6 +25,8 @@ class HomeController extends Controller
      */
     public function index()
     {
-        return view('home');
+        $companies = DB::table('companies')
+                    ->where('user_id', '=', auth()->user()->id)->get();
+        return view('home')->with('companies', $companies);
     }
 }

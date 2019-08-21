@@ -8,13 +8,30 @@
                 <div class="card-header">Dashboard</div>
 
                 <div class="card-body">
-                    @if (session('status'))
-                        <div class="alert alert-success" role="alert">
-                            {{ session('status') }}
-                        </div>
-                    @endif
-
-                    You are logged in!
+                        @if(count($companies) > 0)
+                        
+                        @foreach ($companies as $company)
+                                {{-- <div class="well">
+                                    <h3>{{ $company->name }}</h3>
+                                    <small>Location : {{ $company->location }}</small>
+                                </div> --}}
+    
+                                <ul class="list-group">
+                                    <li class="list-group-item">
+                                        <h4>{{ $company->name }}</h4>
+                                        <small>Location : {{ $company->location }}</small>
+                                        <span class="float-right">
+                                            <a href="/companies/{{ $company->id }}" class="btn btn-primary">Details</a>
+                                        </span>
+                                    </li>
+                                </ul>
+                            @endforeach
+                            
+                        @else
+    
+                            <p>No company found</p>
+    
+                        @endif
                 </div>
             </div>
         </div>
