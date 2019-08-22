@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use App\User;
 use App\Company;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\WithFaker;
@@ -13,7 +14,10 @@ class CompanyTest extends TestCase
 
     private $user;
 
-    private function create_user() {
+    public function setUp(): void
+    {
+        parent::setUp();
+
         $this->user = factory(User::class)->create([
             'email' => 'admin@admin.com',
             'password' => bcrypt('password123'),
@@ -25,7 +29,7 @@ class CompanyTest extends TestCase
     {
         $this->withoutExceptionHandling();
 
-        $response = $this->post('/companies', [
+        $response = $this->actingAs($this->user)->post('/companies', [
             'name' => 'enov8',
             'location' => 'Lagos', 
             'email' => 'hello@enov8.com', 
@@ -43,7 +47,7 @@ class CompanyTest extends TestCase
     {
         $this->withoutExceptionHandling();
 
-        $this->post('/companies', [
+        $this->actingAs($this->user)->post('/companies', [
             'name' => 'enov8',
             'location' => 'Lagos', 
             'email' => 'hello@enov8.com', 
@@ -53,7 +57,7 @@ class CompanyTest extends TestCase
 
         $company = Company::first();
 
-        $response = $this->patch('/companies/'. $company->id, [
+        $response = $this->actingAs($this->user)->patch('/companies/'. $company->id, [
             'name' => 'enov8 solutions',
             'location' => 'Lekki', 
             'email' => 'hello@enov8.com', 
@@ -72,7 +76,7 @@ class CompanyTest extends TestCase
     {
         $this->withoutExceptionHandling();
 
-        $response = $this->post('/companies', [
+        $response = $this->actingAs($this->user)->post('/companies', [
             'name' => 'enov8',
             'location' => 'Lagos', 
             'email' => 'hello@enov8.com', 
@@ -83,7 +87,7 @@ class CompanyTest extends TestCase
         $company = Company::first();
         $this->assertCount(1, Company::all());
 
-        $response = $this->delete('/companies/' . $company->id);
+        $response = $this->actingAs($this->user)->delete('/companies/' . $company->id);
 
         $this->assertCount(0, Company::all());
         $response->assertRedirect('/companies');

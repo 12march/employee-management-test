@@ -2,12 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Company;
 use App\Employee;
-use Illuminate\Support\Facades\DB;
+use App\Company;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
-class CompanyController extends Controller
+class EmployeeController extends Controller
 {
     /**
      * Create a new controller instance.
@@ -27,9 +27,7 @@ class CompanyController extends Controller
      */
     public function index()
     {
-        $companies = Company::latest()->get();
-        
-        return view('company.company')->with('companies', $companies);
+        //
     }
 
     /**
@@ -37,9 +35,11 @@ class CompanyController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function add($id)
     {
-        return view('company.create-company');
+        $company_id = $id;
+
+        return view('employee.create-employee')->with('company_id', $company_id);
     }
 
     /**
@@ -50,9 +50,10 @@ class CompanyController extends Controller
      */
     public function store(Request $request)
     {
-        Company::create($request->all());
+        $id = $request->input('company_id');
+        Employee::create($request->all());
 
-        return redirect('/companies');
+        return redirect('/companies/'.$id);
     }
 
     /**
@@ -63,11 +64,7 @@ class CompanyController extends Controller
      */
     public function show($id)
     {
-        $company = Company::find($id);
-        $employees = DB::table('employees')
-                    ->where('company_id', '=', $id)->get();
-
-        return view('company.company-details', compact('company', 'employees'));
+        //
     }
 
     /**
@@ -78,8 +75,9 @@ class CompanyController extends Controller
      */
     public function edit($id)
     {
-        $company = Company::find($id);
-        return view('company.edit-company')->with('company', $company);
+        $employee = Employee::find($id);
+
+        return view('employee.edit-employee')->with('employee', $employee);
     }
 
     /**
@@ -91,10 +89,12 @@ class CompanyController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $company = Company::find($id);
-        $company->update($request->all());
+        $company_id = $request->input('company_id');
 
-        return redirect('/companies/'.$id);
+        $employee = Employee::find($id);
+        $employee->update($request->all());
+
+        return redirect('/home');
     }
 
     /**
@@ -105,9 +105,9 @@ class CompanyController extends Controller
      */
     public function destroy($id)
     {
-        $company = Company::find($id);
-        $company->delete();
+        $employee = Employee::find($id);
+        $employee->delete();
 
-        return redirect('/companies');
+        return redirect('/home');
     }
 }

@@ -19,7 +19,7 @@
                                 <ul class="list-group">
                                     <li class="list-group-item">
                                         <h4>{{ $company->name }}</h4>
-                                        <small>Location : {{ $company->location }}</small>
+                                        <small><strong>Location :</strong> {{ $company->location }}</small>
                                         <span class="float-right">
                                             <a href="/companies/{{ $company->id }}" class="btn btn-primary">Details</a>
                                         </span>
